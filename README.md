@@ -6,7 +6,7 @@ Net Radio Archive
 - シンボリックリンクを作成する機能を無効化
 - ほぼ全チャンネル(関東圏)を録音するように変更
 
-# セットアップ(Fork : branch : /customize, Docker)
+## セットアップ(Fork : branch : /customize, Docker)
 ```
 $ git clone git@github.com:sobadon/net-radio-archive.git
 $ cd net-radio-archive
