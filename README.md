@@ -2,9 +2,22 @@
 Net Radio Archive
 
 -----
-## Changelog (/customize)
+## Changelog (Fork : /customize)
 - シンボリックリンクを作成する機能を無効化
 - ほぼ全チャンネル(関東圏)を録音するように変更
+
+# セットアップ(Fork : branch : /customize, Docker)
+```
+$ git clone git@github.com:sobadon/net-radio-archive.git
+$ cd net-radio-archive
+$ git checkout customize
+## 各コンテナを繋ぐネットワークを作成する
+$ docker nwtwork create radio
+## appのbuildのために，MySQLのコンテナを裏で起動する
+$ docker-compose -f docker-compose.db.yml up -d
+$ docker build --network radio -t yayugu/net-radio-archive .
+```
+-----
 
 ## なにこれ
 ネットラジオを録画するやつ

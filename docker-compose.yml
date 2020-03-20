@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  radiodb:
+    image: mysql:5.6
+    container_name: radiodb
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --performance-schema=false --table-definition-cache=400
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - radio
+    restart: always
+
+  radioapp:
+    image: yayugu/net-radio-archive
+    container_name: radioapp
+    volumes:
+      - /mnt/linux_share/radio_bon/working:/working
+      - /mnt/linux_share/radio_bon/archive:/archive
+      - ./data/log:/myapp/log
+    networks:
+      - radio
+    depends_on:
+      - radiodb
+    links:
+      - radiodb:mysql
+    restart: always
+
+networks:
+  radio:
+    external: true
