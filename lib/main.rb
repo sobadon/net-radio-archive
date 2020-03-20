@@ -108,24 +108,6 @@ module Main
 
     FileUtils.mkdir_p(dst_dir)
     FileUtils.mv(src, dst)
-
-    # create symlink
-    FileUtils.mkdir_p(latest_dir)
-    unless File.exist?(latest_symlink)
-      FileUtils.ln_s(dst, latest_symlink)
-    end
-
-    # create selections symlink
-    if Settings.selections.present?
-      if Settings.selections.any? {|s| !!filename.match(s) }
-        selection_dir = "#{Settings.archive_dir}/0_selections"
-        selection_symlink = "#{selection_dir}/#{filename}"
-        FileUtils.mkdir_p(selection_dir)
-        unless File.exist?(selection_symlink)
-          FileUtils.ln_s(dst, selection_symlink)
-        end
-      end
-    end
   end
 
   def self.file_path_archive(ch_name, title, ext)
