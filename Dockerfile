@@ -76,9 +76,9 @@ RUN mkdir -p "$GEM_HOME" "$BUNDLE_BIN" \
 #=========
 # ffmpeg
 #=========
-RUN wget --no-verbose -O /tmp/ffmpeg.tar.gz http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz \
+RUN wget --no-verbose -O /tmp/ffmpeg.tar.gz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
   && tar -C /tmp -xf /tmp/ffmpeg.tar.gz \
-  && mv /tmp/ffmpeg-*-64bit-static/ffmpeg /usr/bin \
+  && mv /tmp/ffmpeg-*-amd64-static/ffmpeg /usr/bin \
   && rm -rf /tmp/ffmpeg*
 
 #=========
@@ -97,7 +97,7 @@ RUN wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube
 #=========
 # livedl
 #=========
-RUN wget https://github.com/yayugu/livedl/releases/download/20181107.38/livedl -O /usr/local/bin/livedl \
+RUN wget https://github.com/yayugu/livedl/releases/download/20181215.36/livedl -O /usr/local/bin/livedl \
   && chmod a+rx /usr/local/bin/livedl
 
 #============
