@@ -2,8 +2,9 @@
 Net Radio Archive
 
 -----
-## branch : /customize
+## Changelog (/customize)
 - シンボリックリンクを作成する機能を無効化
+- ほぼ全チャンネル(関東圏)を録音するように変更
 
 ## なにこれ
 ネットラジオを録画するやつ
