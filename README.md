@@ -15,7 +15,11 @@ $ git checkout customize
 $ docker network create radio
 ## appのbuildのために，MySQLのコンテナを裏で起動する
 $ docker-compose -f docker-compose.db.yml up -d
+
+## docker-compose.ymlの archive, working のフォルダパスを変更する
+
 $ docker build --network radio -t yayugu/net-radio-archive .
+$ docker-compose up -d
 ```
 -----
 
