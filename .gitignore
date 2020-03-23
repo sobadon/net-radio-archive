@@ -18,7 +18,8 @@
 /tmp
 
 # Ignore local config files
-config/database.yml
-config/settings.yml
+# Customize版ということでignoreしない
+# config/database.yml
+# config/settings.yml
 config/deploy/production.rb
 config/deploy/staging.rb
