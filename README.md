@@ -12,7 +12,7 @@ $ git clone git@github.com:sobadon/net-radio-archive.git
 $ cd net-radio-archive
 $ git checkout customize
 ## 各コンテナを繋ぐネットワークを作成する
-$ docker nwtwork create radio
+$ docker network create radio
 ## appのbuildのために，MySQLのコンテナを裏で起動する
 $ docker-compose -f docker-compose.db.yml up -d
 $ docker build --network radio -t yayugu/net-radio-archive .
