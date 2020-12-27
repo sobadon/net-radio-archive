@@ -14,7 +14,9 @@ services:
     restart: always
 
   radioapp:
-    image: yayugu/net-radio-archive
+    image: net-radio-archive
+    build:
+      context: .
     container_name: radioapp
     volumes:
       - working:/working
