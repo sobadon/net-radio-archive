@@ -23,3 +23,5 @@
 # config/settings.yml
 config/deploy/production.rb
 config/deploy/staging.rb
+
+.env

@@ -17,8 +17,8 @@ services:
     image: yayugu/net-radio-archive
     container_name: radioapp
     volumes:
-      - /mnt/linux_share/radio_bon/working:/working
-      - /mnt/linux_share/radio_bon/archive:/archive
+      - working:/working
+      - archive:/archive
       - ./data/log:/myapp/log
     networks:
       - radio
@@ -31,3 +31,17 @@ services:
 networks:
   radio:
     external: true
+
+volumes:
+  working:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //${HOST}/${ROOT_PATH}/radio_kurari/working
+      o: "username=${CIFS_USERNAME},password=${CIFS_PASSWORD},rw,file_mode=0777,dir_mode=0777"
+  archive:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //${HOST}/${ROOT_PATH}/radio_kurari/archive
+      o: "username=${CIFS_USERNAME},password=${CIFS_PASSWORD},rw,file_mode=0777,dir_mode=0777"
