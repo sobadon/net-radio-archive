@@ -7,39 +7,35 @@ module Ag
     CH_NAME = 'ag'
 
     def record(job)
-      unless exec_rec(job)
-        return false
-      end
-      exec_convert(job)
-
-      true
+      exec_rec(job)
     end
 
     def exec_rec(job)
       Main::prepare_working_dir(CH_NAME)
       Main::sleep_until(job.start - 10.seconds)
 
-      length = job.length_sec + 60
-      mp4_path = Main::file_path_working(CH_NAME, title(job), 'mp4')
+      length = job.length_sec + 90
+      file_path = Main::file_path_working(CH_NAME, title(job), 'mp4')
       arg = "\
-        -loglevel warning \
+        -loglevel error \
         -y \
-        -i #{Shellwords.escape(AGQR_STREAM_URL)} \
+        -allowed_extensions ALL \
+        -protocol_whitelist file,crypto,http,https,tcp,tls \
+        -i #{AGQR_STREAM_URL} \
         -t #{length} \
-        -vcodec none -acodec copy \
-        #{Shellwords.escape(mp4_path)}"
+        -vcodec copy -acodec copy -bsf:a aac_adtstoasc \
+        #{Shellwords.escape(file_path)}"
       exit_status, output = Main::ffmpeg(arg)
       unless exit_status.success?
         Rails.logger.error "rec failed. job:#{job}, exit_status:#{exit_status}, output:#{output}"
         return false
       end
+      if output.present?
+        Rails.logger.warn "ag ffmpeg command:#{arg} output:#{output}"
+      end
 
+      Main::move_to_archive_dir(CH_NAME, job.start, file_path)
       true
-    end
-
-    def exec_convert(job)
-      mp4_path = Main::file_path_working(CH_NAME, title(job), 'mp4')
-      Main::move_to_archive_dir(CH_NAME, job.start, mp4_path)
     end
 
     def title(job)
