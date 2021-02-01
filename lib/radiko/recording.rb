@@ -102,24 +102,34 @@ module Radiko
 
     def m3u8_chunk(job)
       uri = "http://c-radiko.smartstream.ne.jp/#{job.ch}/_definst_/simul-stream.stream/playlist.m3u8"
-			p uri
-      res = HTTParty.get(uri, {
-        headers: {
-          'X-Radiko-Authtoken' => @auth_token
-        }
-      })
-      p res
-      @m3u8_url = /^https?:\/\/.+m3u8$/i.match(res.body)[1]
+      uri_alt = "http://f-radiko.smartstream.ne.jp/#{job.ch}/_definst_/simul-stream.stream/playlist.m3u8"
+      begin
+        p uri
+        res = HTTParty.get(uri, {
+          headers: {
+            'X-Radiko-Authtoken' => @auth_token
+          }
+        })
+        p res
+        @m3u8_url = /^https?:\/\/.+m3u8$/i.match(res.body)[0]
+      rescue => e
+        if uri != uri_alt
+          uri = uri_alt
+          retry
+        else
+          raise e
+        end
+      end
     end
 
     def download_hls(job)
       Main::sleep_until(job.start - 10.seconds)
 
-      length = job.length_sec + 60
+      length = job.length_sec + 90
       file_path = Main::file_path_working(job.ch, title(job), 'm4a')
       arg = "\
         -loglevel warning \
-        -headers 'X-Radiko-AuthToken: #{@auth_token}' \
+        -headers 'X-Radiko-AuthToken: #{@auth_token}\r\n' \
         -y \
         -i #{Shellwords.escape(@m3u8_url)} \
         -t #{length} \
@@ -127,9 +137,12 @@ module Radiko
         #{Shellwords.escape(file_path)}"
 
       exit_status, output = Main::ffmpeg(arg)
-      unless exit_status.success? && output.blank?
+      unless exit_status.success?
         Rails.logger.error "rec failed. job:#{job.id}, exit_status:#{exit_status}, output:#{output}"
         return false
+      end
+      if output.present?
+        Rails.logger.warn "radiko ffmpeg command:#{arg} output:#{output}"
       end
 
       true
